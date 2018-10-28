@@ -1,0 +1,96 @@
+# -Explore-U.S.-Births
+
+# coding: utf-8
+
+# In[3]:
+
+
+f = open ("US_births_1994-2003_CDC_NCHS.csv","r")
+text = f.read()
+text_split = text.split('\n')
+text_split[0:10]
+
+
+# In[17]:
+
+
+def read_csv(a):
+    f = open(str(a),"r")
+    file = f.read()
+    file_split = file.split('\n')
+    string_list = file_split[1:len(file_split)]
+    final_list = []
+    for item in string_list:
+        int_fields = []
+        string_fields = item.split(",")
+        for item in string_fields:
+            item2 = int(item)
+            int_fields.append(item2)
+        final_list.append(int_fields)
+    return final_list
+
+cdc_list = read_csv("US_births_1994-2003_CDC_NCHS.csv")
+cdc_list[0:10]
+
+
+# In[19]:
+
+
+def month_birth(b):
+    births_per_month = {}
+    for item in b:
+        month = item[1]
+        births = item[4]
+        if month in births_per_month:
+            births_per_month[month] += births
+        else:
+            births_per_month[month] = births
+    return births_per_month
+
+cdc_month_births = month_birth(cdc_list)
+print (cdc_month_births)
+
+
+# In[20]:
+
+
+def dow_births(c):
+    births_per_dow = {}
+    for item in c:
+        dow = item[3]
+        births = item[4]
+        if dow in births_per_dow:
+            births_per_dow[dow] += births
+        else:
+            births_per_dow[dow] = births
+    return births_per_dow
+
+cdc_day_births = dow_births(cdc_list)
+print (cdc_day_births)
+
+
+# In[22]:
+
+
+def calc_counts(data,column):
+    births_per_x = {}
+    for item in data:
+        x = item[column]
+        births = item[4]
+        if x in births_per_x:
+            births_per_x[x] += births
+        else:
+            births_per_x[x] = births
+    return births_per_x
+
+cdc_year_births = calc_counts(cdc_list,0)
+cdc_month_births = calc_counts(cdc_list,1)
+cdc_dom_births = calc_counts(cdc_list,2)
+cdc_dow_births = calc_counts(cdc_list,3)
+
+print (cdc_year_births)
+print (cdc_month_births)
+print (cdc_dom_births)
+print (cdc_dow_births)
+    
+
